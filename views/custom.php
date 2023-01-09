@@ -1,0 +1,1 @@
+<h1>Custum id <?=$_GET['id']?> </h1>

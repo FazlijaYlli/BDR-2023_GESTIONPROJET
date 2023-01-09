@@ -3,13 +3,21 @@
  * User:
  * Date:
  */
+
+$debug = true;
+
 session_start();
 
-require "controller.php";
-
+require "controller.php";?>
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <link rel="stylesheet" href="style.css">
+    </head>
+<?php
 require 'views/header.php';
 
-if (isset($_SESSION['user'])) {
+if (!isset($_SESSION['user']) and !$debug) {
     login();
 }else{
     if (isset($_GET['action'])) {
@@ -19,9 +27,10 @@ if (isset($_SESSION['user'])) {
     }
 
     switch($action){
-        //TODO
+        case 'custom';
+            cumstom();
+            break;
         case 'home':
-            //continue
         default:
             home();
     }

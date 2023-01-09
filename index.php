@@ -1,10 +1,30 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="utf-8">
-    <title>Index</title>
-</head>
-<body>
-    <h1>Hello World !</h1>
-</body>
-</html>
+<?php
+/**
+ * User:
+ * Date:
+ */
+session_start();
+
+require "controller.php";
+
+require 'views/header.php';
+
+if (isset($_SESSION['user'])) {
+    login();
+}else{
+    if (isset($_GET['action'])) {
+        $action = $_GET['action'];
+    } else {
+        $action = 'home';
+    }
+
+    switch($action){
+        //TODO
+        case 'home':
+            //continue
+        default:
+            home();
+    }
+}
+
+require 'views/footer.php';

@@ -8,7 +8,7 @@ function home(){
 }
 
 function projet(){
-    $result = getProjetInfo($_GET['nom']);
+    $result = getProjetInfo($_GET['projet']);
 
     if (!$result) {
         echo "Une erreur est survenue lors de la récupération des informations du projet.\n";
@@ -19,6 +19,69 @@ function projet(){
     $projet = pg_fetch_assoc($result);
 
     require 'views/projet.php';
+}
+
+
+function listTaches(string $projet, string $release){
+    $result = getListTacheInfo($projet, $release);
+
+    if (!$result) {
+        require 'views/error.php';
+        return false;
+    }
+
+    return $result;
+}
+function releaseProjet(): void
+{
+    $result = getReleaseInfo($_GET['projet'],$_GET['release']);
+
+    if (!$result) {
+        require 'views/error.php';
+        exit;
+    }
+
+    $release = pg_fetch_assoc($result);
+
+    if (!$release) {
+        require 'views/unknown.php';
+        exit;
+    }
+
+    require 'views/release.php';
+
+    $taches = listTaches($_GET['projet'],$_GET['release']);
+
+    if(!$taches){
+        require 'views/noTaches.php';
+        exit;
+    }
+
+    while ($tache = pg_fetch_assoc($taches)) {
+        $TASK_DETAILS = false;
+        require 'views/tache.php';
+    }
+}
+
+function tache(): void
+{
+    $result = getTacheInfo($_GET['id']);
+
+    if (!$result) {
+        require 'views/error.php';
+        exit;
+    }
+
+    $tache = pg_fetch_assoc($result);
+
+    if (!$tache) {
+        require 'views/unknown.php';
+        exit;
+    }
+
+    $TASK_DETAILS = true;
+    require 'views/tache.php';
+
 }
 
 function custom(){

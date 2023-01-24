@@ -36,6 +36,13 @@ if (!isset($_SESSION['user']) and !$debug) {
             break;
         case 'projet':
             projet();
+            break;
+        case 'release':
+            releaseProjet();
+            break;
+        case 'tache':
+            tache();
+            break;
         default:
             home();
     }

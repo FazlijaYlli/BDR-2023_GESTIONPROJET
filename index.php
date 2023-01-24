@@ -8,12 +8,15 @@ $debug = true;
 
 session_start();
 
-require "controller.php";?>
+require "controller.php"; ?>
+
     <!DOCTYPE html>
-    <html>
+    <html lang="fr">
     <head>
         <link rel="stylesheet" href="style.css">
+        <title>Gestion de Projet</title>
     </head>
+
 <?php
 require 'views/header.php';
 

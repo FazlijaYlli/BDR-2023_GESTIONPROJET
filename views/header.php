@@ -1,6 +1,6 @@
 <header class="site-header">
     <div class="site-identity">
-        <a href="#"><img src="bdrGirlToImplement.png" alt="BDR-AnimeGirl"/></a>
+        <a href="#"><img src="../bdrGirl.jpg" alt="BDR-AnimeGirl"/></a>
         <h1><a href="#">Gestion de Projet</a></h1>
     </div>
     <nav class="site-navigation">

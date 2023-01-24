@@ -21,6 +21,13 @@ function projet(){
     require 'views/projet.php';
 }
 
+function projetList()
+{
+    $result = getProjets();
+    $projets = pg_fetch_all($result);
+    require 'views/projetList.php';
+}
+
 function custom(){
     if(isset($_GET['id'])){
         require 'views/custom.php';

@@ -31,11 +31,12 @@ if (!isset($_SESSION['user']) and !$debug) {
         case 'custom';
             custom();
             break;
-        case 'home':
-            //continue
-            break;
         case 'projet':
             projet();
+            break;
+        case 'projetList':
+            projetList();
+            break;
         default:
             home();
     }

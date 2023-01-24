@@ -18,7 +18,8 @@ require_once "controller.php";
 <?php
 require 'views/header.php';
 
-if (!isset($_SESSION['user']) and !$debug) {
+
+if (!isset($_SESSION['userid'])) {
     login();
 }else{
     if (isset($_GET['action'])) {
@@ -28,17 +29,16 @@ if (!isset($_SESSION['user']) and !$debug) {
     }
 
     switch($action){
-        case 'custom';
-            custom();
+        case 'logout';
+            logout();
             break;
         case 'projet':
             projet();
             break;
         case 'projetList':
+        default:
             projetList();
             break;
-        default:
-            home();
     }
 }
 

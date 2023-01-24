@@ -258,8 +258,8 @@ VALUES ('Base de données', 'Tâches liées à la mise en place de la base de do
        ('UX Design', 'Tâches liées au développement de l interface utilisateur');
 
 INSERT INTO Utilisateur (nom, prénom, hashMdp, fonction)
-VALUES ('Smith', 'John', '$2y$10$y1.GdN7MUnh8Z/JlqGly6.kpwgbWgFz98VPFsG/7jRAINw0fGcNci', 'Employé'),
-       ('Doe', 'Jane', '$2y$10$401Qr0kzPDssMafGO/D6QuEPJZ23NpfYrRzYGNlYEQplgSPRwkmA2', 'Directeur');
+VALUES ('Smith', 'John', 'd404559f602eab6fd602ac7680dacbfaadd13630335e951f097af3900e9de176b6db28512f2e000b9d04fba5133e8b1c6e8df59db3a8ab9d60be4b97cc9e81db', 'Employé'),
+       ('Doe', 'Jane', 'd404559f602eab6fd602ac7680dacbfaadd13630335e951f097af3900e9de176b6db28512f2e000b9d04fba5133e8b1c6e8df59db3a8ab9d60be4b97cc9e81db', 'Directeur');
 
 INSERT INTO Tâche (titre, description, delai, statut, dureeEstimée, dureeRéelle, nomProjetRelease, nomProjet,
                    nomGroupeDeTâche, idUtilisateur)

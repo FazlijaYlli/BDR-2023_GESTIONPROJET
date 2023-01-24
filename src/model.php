@@ -17,3 +17,11 @@ function getProjets()
     $result = pg_query($GLOBALS["db"], $query);
     return $result;
 }
+
+function getUserWithCredential($username, $password)
+{
+    $hash = hash("sha512", $password);
+    $query = "SELECT id, nom, prénom FROM utilisateur WHERE  CONCAT (prénom,'.', nom) = '$username' AND hashmdp = '$hash'";
+    $result = pg_query($GLOBALS["db"], $query);
+    return $result;
+}

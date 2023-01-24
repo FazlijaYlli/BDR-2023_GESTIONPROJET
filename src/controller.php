@@ -28,47 +28,43 @@ function projetList()
     require 'views/projetList.php';
 }
 
-function custom(){
-    if(isset($_GET['id'])){
-        require 'views/custom.php';
-    }else{
-        $msg = "id not set";
-        require 'views/error.php';
-    }
-}
 
 function login(){
-    if(isset($_POST['username'])&&isset($_POST['password'])){
+    if(isset($_POST['usr'])&&isset($_POST['psw'])){
         trylogin();
     }else{
         displayLoginPage();
     }
 }
 
+function logout(){
+    unset($_SESSION['userid']);
+    header('Location: ?action=login');
+}
+
+
 function displayLoginPage(){
     require 'views/login.php';
 }
 
 function tryLogin(){
-    if (checkPassword($_POST['username'], $_POST['password'])) {
-        $_SESSION['user'] =  $_POST['username'];
-        redirect("home");
-    } else {
-        displayLoginPage();
+    $res = checkPassword($_POST['usr'], $_POST['psw']);
+    if(!$res){
+        echo "Mauvais identifient ou mot de passe";
+        unset($_POST['usr']);
+        unset($_POST['psw']);
+        login();
+    }else{
+        $_SESSION['userid'] = $res['id'];
+        echo "Vous êtes connecté";
+        header('Location: ?action=projetList');
     }
 }
 
-function checkPassword(mixed $username, mixed $password)
+function checkPassword($username, $password)
 {
-    return true; //TODO
-}
-
-function redirect($action, $id = 0)
-{
-    if ($id > 0) {
-        header('Location: ?action=' . $action . '&id=' . $id);
-    } else {
-        header('Location: ?action=' . $action);
-    }
+    $result = getUserWithCredential($username, $password);
+    $user = pg_fetch_assoc($result);
+    return $user;
 }
 

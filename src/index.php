@@ -29,7 +29,7 @@ if (!isset($_SESSION['user']) and !$debug) {
 
     switch($action){
         case 'custom';
-            cumstom();
+            custom();
             break;
         case 'home':
             //continue

@@ -1,4 +1,8 @@
 <?php
+
+$msgTodisplay = '';
+$displayError = false;
+
 function home(){
     require 'views/home.php';
 }
@@ -7,8 +11,16 @@ function projet(){
     require 'views/projet.php';
 }
 
-function login()
-{
+function custom(){
+    if(isset($_GET['id'])){
+        require 'views/custom.php';
+    }else{
+        $msg = "id not set";
+        require 'views/error.php';
+    }
+}
+
+function login(){
     if(isset($_POST['username'])&&isset($_POST['password'])){
         trylogin();
     }else{
@@ -21,17 +33,25 @@ function displayLoginPage(){
 }
 
 function tryLogin(){
-    if (password_verify($_POST['username'], $_POST['password'])) {
+    if (checkPassword($_POST['username'], $_POST['password'])) {
         $_SESSION['user'] =  $_POST['username'];
         redirect("home");
     } else {
-        alert('Identifiants incorrects ...');
         displayLoginPage();
     }
 }
 
-function alert($msg){
-    $_SESSION['msg'] = $msg;
-    //TODO
+function checkPassword(mixed $username, mixed $password)
+{
+    return true; //TODO
+}
+
+function redirect($action, $id = 0)
+{
+    if ($id > 0) {
+        header('Location: ?action=' . $action . '&id=' . $id);
+    } else {
+        header('Location: ?action=' . $action);
+    }
 }
 

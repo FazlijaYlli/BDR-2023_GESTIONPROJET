@@ -1,5 +1,5 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT']."\setting.php";
+require_once $_SERVER['DOCUMENT_ROOT']."/settings.php";
 
 $GLOBALS["db"] = pg_connect($host. ' ' . $port. ' ' .$dbname.' '.$credentials);
 

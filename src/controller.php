@@ -8,6 +8,16 @@ function home(){
 }
 
 function projet(){
+    $result = getProjetInfo($_GET['nom']);
+
+    if (!$result) {
+        echo "Une erreur est survenue lors de la récupération des informations du projet.\n";
+        exit;
+    }
+
+    // Récupère les informations du projet
+    $projet = pg_fetch_assoc($result);
+
     require 'views/projet.php';
 }
 

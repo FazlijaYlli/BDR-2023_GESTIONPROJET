@@ -1,9 +1,6 @@
 <?php
-
-// Requête pour récupérer les informations d'un projet spécifique
 $nomProjet = "Projet A";
-$query = "SELECT nom, description FROM projet WHERE nom='$nomProjet'";
-$result = pg_query($db, $query);
+$result = getProjetInfo($nomProjet);
 
 if (!$result) {
     echo "Une erreur est survenue lors de la récupération des informations du projet.\n";

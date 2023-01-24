@@ -10,21 +10,25 @@ function getProjetInfo(string $nomProjet)
     $params = array($nomProjet);
 
     $result = pg_query_params($GLOBALS["db"], $query, $params);
+    return $result;
 }
 
 function getProjets()
 {
     $query = "SELECT nom, description FROM projet";
-    $result = pg_query($GLOBALS["db"], $query);
+    $params = array();
+
+    $result = pg_query_params($GLOBALS["db"], $query, $params);
     return $result;
 }
 
 function getUserWithCredential($username, $password)
 {
     $hash = hash("sha512", $password);
-    $query = "SELECT id, nom, prénom FROM utilisateur WHERE  CONCAT (prénom,'.', nom) = '$username' AND hashmdp = '$hash'";
-    $result = pg_query($GLOBALS["db"], $query);
+    $query = "SELECT id, nom, prénom FROM utilisateur WHERE  CONCAT (prénom,'.', nom) = $1 AND hashmdp = $2";
+    $params = array($username,$hash);
 
+    $result = pg_query_params($GLOBALS["db"], $query, $params);
     return $result;
 }
 
@@ -36,7 +40,6 @@ function getReleaseInfo(string $nomProjet, string $nomRelease)
     $params = array($nomProjet, $nomRelease);
 
     $result = pg_query_params($GLOBALS["db"], $query, $params);
-
     return $result;
 }
 
@@ -48,7 +51,6 @@ function getListTacheInfo(string $nomProjet, string $nomRelease)
     $params = array($nomProjet,$nomRelease);
 
     $result = pg_query_params($GLOBALS["db"], $query, $params);
-
     return $result;
 }
 
@@ -60,7 +62,6 @@ function getTacheInfo(string $idTache)
     $params = array($idTache);
 
     $result = pg_query_params($GLOBALS["db"], $query, $params);
-
     return $result;
 }
 

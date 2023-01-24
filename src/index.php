@@ -19,7 +19,7 @@ require_once "controller.php";
 require 'views/header.php';
 
 
-if (!isset($_SESSION['userid'])) {
+if (false){//!isset($_SESSION['userid'])) {
     login();
 }else{
     if (isset($_GET['action'])) {
@@ -37,7 +37,7 @@ if (!isset($_SESSION['userid'])) {
             break;
         case 'projetList':
             projetList();
-            break
+            break;
         case 'release':
             releaseProjet();
             break;

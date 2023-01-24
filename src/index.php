@@ -1,11 +1,9 @@
 <?php
-/**
- * User:
- * Date:
- */
 session_start();
 
-require "controller.php";
+require_once "model.php";
+
+require_once "controller.php";
 
 require 'views/header.php';
 
@@ -22,6 +20,8 @@ if (isset($_SESSION['user'])) {
         //TODO
         case 'home':
             //continue
+        case 'projet':
+            projet();
         default:
             home();
     }

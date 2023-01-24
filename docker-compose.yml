@@ -1,0 +1,36 @@
+version: '3.8'
+services:
+  db:
+    container_name: postgres
+    image: postgres:14.1-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - '5432:5432'
+    volumes:
+      - db:/var/lib/postgresql/data
+      - ./db/create_table.sql:/docker-entrypoint-initdb.d/create_table.sql
+  php-apache-environment:
+    container_name: php-apache
+    build:
+      context: "./"
+      dockerfile: Dockerfile-Apache
+    depends_on:
+      - db
+    ports:
+      - "80:80"
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: postgres
+    links:
+      - db
+    volumes:
+      - ./src:/var/www/html/
+volumes:
+  db:
+    driver: local

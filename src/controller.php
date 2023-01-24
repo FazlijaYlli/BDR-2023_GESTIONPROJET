@@ -1,7 +1,10 @@
 <?php
-
 function home(){
     require 'views/home.php';
+}
+
+function projet(){
+    require 'views/projet.php';
 }
 
 function login()

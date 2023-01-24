@@ -1,17 +1,10 @@
+<h1><?=$projet['nom']?></h1>
+
+
+
 <?php
-$nomProjet = "Projet A";
-$result = getProjetInfo($nomProjet);
-
-if (!$result) {
-    echo "Une erreur est survenue lors de la récupération des informations du projet.\n";
-    exit;
-}
-
-// Récupère les informations du projet
-$projet = pg_fetch_assoc($result);
-
 // Requête pour récupérer les releases du projet
-$query = "SELECT nom, sortiePrévue, sortieEffective FROM projetrelease WHERE nomprojet='$nomProjet'";
+/**$query = "SELECT nom, sortiePrévue, sortieEffective FROM projetrelease WHERE nomprojet='$nomProjet'";
 $result = pg_query($db, $query);
 
 if (!$result) {
@@ -33,3 +26,4 @@ $tâches = pg_fetch_all($result);
 
 // Fermeture de la connection à la base de données
 pg_close($db);
+ **/

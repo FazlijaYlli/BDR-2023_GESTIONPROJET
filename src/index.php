@@ -33,6 +33,7 @@ if (!isset($_SESSION['user']) and !$debug) {
             break;
         case 'home':
             //continue
+            break;
         case 'projet':
             projet();
         default:

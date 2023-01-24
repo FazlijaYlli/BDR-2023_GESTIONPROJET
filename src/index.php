@@ -36,8 +36,16 @@ if (!isset($_SESSION['userid'])) {
             projet();
             break;
         case 'projetList':
-        default:
             projetList();
+            break
+        case 'release':
+            releaseProjet();
+            break;
+        case 'tache':
+            tache();
+            break;
+        default:
+            home();
             break;
     }
 }

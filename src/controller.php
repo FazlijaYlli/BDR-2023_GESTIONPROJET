@@ -57,6 +57,7 @@ function releaseList(string $nomProjet)
     $roleFetch = pg_fetch_assoc($roleQuery);
 
     if(!$roleFetch) {
+        $noRessource = "utilisateurs";
         require 'views/noRessource.php';
         exit;
     }
@@ -128,6 +129,22 @@ function release(): void
     require 'views/release.php';
 
     tacheList($_GET['projet'],$_GET['release']);
+
+    $result = getUsersRoleForProjet($release['nomprojet']);
+
+    if (!$result) {
+        require 'views/error.php';
+        exit;
+    }
+
+    while ($responsable = pg_fetch_assoc($result)){
+        if($responsable['id'] == $_SESSION['userid']){
+            require 'views/createTache.php';
+        }
+    };
+
+
+
 }
 
 function tache(): void
@@ -213,5 +230,9 @@ function newrelease(){
 function addUser(){
     addToProject($_POST['projetname'],$_POST['userIdToAdd'],$_POST['role']);
     header('Location: ?action=projet&projet='.$_POST['projetname']);
+}
+function newTache(){
+    createTache($_POST['titre'],$_POST['description'],$_POST['delai'],$_POST['dureeestimée']);
+    header('Location: ?action=release&projet='.$_GET['projet'].'&release='.$_GET['release']);
 }
 

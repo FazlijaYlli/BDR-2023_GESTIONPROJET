@@ -53,6 +53,9 @@ if (!isset($_SESSION['userid'])) {
         case 'addUser' :
             addUser();
             break;
+        case 'newTache':
+            newTache();
+            break;
         default:
             home();
             break;

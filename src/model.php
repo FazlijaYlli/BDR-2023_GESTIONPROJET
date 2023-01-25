@@ -116,3 +116,10 @@ function getUserRole($idUtilisateur, $nomProjet)
     return pg_query_params($GLOBALS["db"], $query, $params);
 }
 
+function createTache($titre, $description, $delai, $dureeestimée)
+{
+    $query = "INSERT INTO Tâche (titre, description, delai, dureeestimée, statut, nomprojet, nomprojetrelease)
+        VALUES ($1,$2,$3,$4,$5,$6,$7)";
+    $params = array($titre, $description, $delai, $dureeestimée,$_GET['projet'],$_GET['release']);
+    pg_query_params($GLOBALS["db"], $query, $params);
+}

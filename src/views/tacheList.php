@@ -4,7 +4,7 @@
         <th>Tâche</th>
         <th>Délai</th>
         <th>Status</th>
-        <th>S'assigner</th>
+        <th>Action</th>
     </thead>
 <?php foreach ($taches as $tache): ?>
     <tr>

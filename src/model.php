@@ -96,6 +96,12 @@ function getUsersRoleForProjet($nomProjet){
     $result = pg_query_params($GLOBALS["db"], $query, $params);
     return $result;
 }
+function createRelease($nomProjet, $nomRelease, $estimatedDate)
+{
+    $query = "INSERT INTO projetrelease (nomprojet, nom, sortieprévue)
+        VALUES ('$nomProjet', '$nomRelease','$estimatedDate')";
+    pg_query($GLOBALS["db"], $query);
+}
 
 function addToProject($projetname, $userIdToAdd, $role)
 {
@@ -103,3 +109,10 @@ function addToProject($projetname, $userIdToAdd, $role)
     $params = array($userIdToAdd, $projetname, $role);
     pg_query_params($GLOBALS["db"], $query, $params);
 }
+function getUserRole($idUtilisateur, $nomProjet)
+{
+    $query = "SELECT responsabilité FROM utilisateur_projet WHERE nomprojet=$1 AND idutilisateur=$2";
+    $params = array($nomProjet, $idUtilisateur);
+    return pg_query_params($GLOBALS["db"], $query, $params);
+}
+

@@ -252,3 +252,8 @@ function newTache(){
     header('Location: ?action=release&projet='.$_POST['projet'].'&release='.$_POST['release']);
 }
 
+function actionTache(){
+    updateTacheStatus($_POST['type'],$_POST['idTache'],$_SESSION['userid']);
+    header('Location: ?action=release&projet='.$_POST['projet'].'&release='.$_POST['release']);
+}
+

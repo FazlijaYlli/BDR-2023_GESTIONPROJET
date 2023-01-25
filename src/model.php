@@ -140,3 +140,20 @@ function createTache($titre, $description, $delai, $dureeestimée, $groupeTache,
     $params = array($titre, $description, $delai, 'Planifié', $dureeestimée,  $groupeTache, $nomprojet, $nomrelease);
     pg_query_params($GLOBALS["db"], $query, $params);
 }
+
+function updateTacheStatus($type,$idTache, $idUser)
+{
+    switch ($type){
+        case 'terminer':
+            $query = "UPDATE tâche SET statut = $2, dureeréelle = NOW() WHERE id = $1";
+            $params = array($idTache,'Terminé');
+            break;
+        case 'assigner':
+            $query = "UPDATE tâche SET idutilisateur = $2, statut = $3 WHERE id = $1";
+            $params = array($idTache,$idUser,'En cours');
+            break;
+        default:
+            exit();
+    }
+    pg_query_params($GLOBALS["db"], $query, $params);
+}

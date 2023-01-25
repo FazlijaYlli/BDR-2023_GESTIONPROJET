@@ -39,7 +39,7 @@ if (!isset($_SESSION['userid'])) {
             projetList();
             break;
         case 'release':
-            releaseProjet();
+            release();
             break;
         case 'tache':
             tache();

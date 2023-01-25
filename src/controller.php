@@ -45,6 +45,21 @@ function releaseList(string $nomProjet)
         exit;
     }
 
+    $roleQuery = getUserRole($_SESSION['userid'], $_GET['projet']);
+    if(!$roleQuery) {
+        require 'views/error.php';
+        exit;
+    }
+
+    $roleFetch = pg_fetch_assoc($roleQuery);
+
+    if(!$roleFetch) {
+        require 'views/noRessource.php';
+        exit;
+    }
+
+    $responsable = $roleFetch['responsabilité'] == "Responsable";
+
     $releases = pg_fetch_all($result);
 
     if (!$releases) {
@@ -168,5 +183,11 @@ function checkPassword($username, $password)
 function newprojet(){
     createProjet($_POST['nameP'],$_POST['descriptionP']);
     header('Location: ?action=projetList');
+}
+
+function newrelease(){
+    $date = $_POST['estimatedDate'];
+    createRelease($_GET['projet'],$_POST['nameR'],$date);
+    header('Location: ?action=projet&projet='.$_GET['projet']);
 }
 

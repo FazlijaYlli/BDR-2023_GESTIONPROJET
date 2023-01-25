@@ -38,7 +38,14 @@ function projetList()
     } else {
         require 'views/projetList.php';
     }
+
+    if($_SESSION['admin']){
+        $resultUser = getUsers();
+        $users = pg_fetch_all($resultUser);
+        require 'views/addProjet.php';
+    }
 }
+
 function releaseList(string $nomProjet)
 {
     $result = getReleases($nomProjet);
@@ -218,7 +225,9 @@ function checkPassword($username, $password)
 }
 
 function newprojet(){
-    createProjet($_POST['nameP'],$_POST['descriptionP']);
+    if($_POST['responsable'] != -1){
+        createProjet($_POST['nameP'],$_POST['descriptionP'],$_POST['responsable']);
+    }
     header('Location: ?action=projetList');
 }
 

@@ -81,11 +81,12 @@ function getTacheInfo(string $idTache)
     return $result;
 }
 
-function createProjet($name, $description)
+function createProjet($name, $description, $responsable)
 {
     $query = "INSERT INTO Projet (nom, description)
         VALUES ('$name', '$description')";
     pg_query($GLOBALS["db"], $query);
+    addToProject($name, $responsable, 'Responsable');
 }
 
 function getUsersRoleForProjet($nomProjet){
@@ -101,6 +102,14 @@ function createRelease($nomProjet, $nomRelease, $estimatedDate)
     $query = "INSERT INTO projetrelease (nomprojet, nom, sortieprévue)
         VALUES ('$nomProjet', '$nomRelease','$estimatedDate')";
     pg_query($GLOBALS["db"], $query);
+}
+
+
+function getUsers()
+{
+    $query = "SELECT utilisateur.id, utilisateur.prénom, utilisateur.nom FROM utilisateur";
+    $result = pg_query($GLOBALS["db"], $query);
+    return $result;
 }
 
 function addToProject($projetname, $userIdToAdd, $role)

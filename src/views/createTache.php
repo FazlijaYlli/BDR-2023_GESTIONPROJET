@@ -1,7 +1,7 @@
 
 <?php if ($_SESSION['userid']): ?>
     <h3>Nouvelle Tache</h3>
-    <form action="?action=newtache" method="post">
+    <form action="?action=newTache" method="post">
         <label for="titre">titre</label><br>
         <input type="text" id="titre" name="titre"><br>
 
@@ -13,7 +13,8 @@
 
         <label for="dureeestimée">Durée estimée</label><br>
         <input type="time" id="dureeestimée" name="dureeestimée" min="00:05:00" max="24:00:00"><br>
-
+        <input name="projet" type="hidden" value="<?= $release['nomprojet'] ?>">
+        <input name="release" type="hidden" value="<?=$release['nom']?>">
         <input type="submit" value="Créer">
     </form>
 <?php endif; ?>

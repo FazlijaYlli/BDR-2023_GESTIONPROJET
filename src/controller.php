@@ -242,6 +242,6 @@ function addUser(){
 }
 function newTache(){
     createTache($_POST['titre'],$_POST['description'],$_POST['delai'],$_POST['dureeestimée']);
-    header('Location: ?action=release&projet='.$_GET['projet'].'&release='.$_GET['release']);
+    header('Location: ?action=release&projet='.$_POST['projet'].'&release='.$_POST['release']);
 }
 

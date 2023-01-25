@@ -88,3 +88,18 @@ function creatProjet($name, $description)
     pg_query($GLOBALS["db"], $query);
 }
 
+function getUsersRoleForProjet($nomProjet){
+    $query = "SELECT utilisateur.id, utilisateur.prénom, utilisateur.nom, utilisateur_projet.responsabilité FROM utilisateur
+        LEFT JOIN utilisateur_projet
+        ON utilisateur_projet.idutilisateur = utilisateur.id AND utilisateur_projet.nomprojet = $1";
+    $params = array($nomProjet);
+    $result = pg_query_params($GLOBALS["db"], $query, $params);
+    return $result;
+}
+
+function addToProject($projetname, $userIdToAdd, $role)
+{
+    $query = "INSERT INTO Utilisateur_Projet (idUtilisateur, nomProjet, responsabilité) VALUES ($1, $2, $3)";
+    $params = array($userIdToAdd, $projetname, $role);
+    pg_query_params($GLOBALS["db"], $query, $params);
+}

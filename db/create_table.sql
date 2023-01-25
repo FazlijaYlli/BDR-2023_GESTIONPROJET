@@ -246,7 +246,8 @@ VALUES ('Java', 'Langage de programmation orienté objet', 'Développement'),
 
 INSERT INTO Projet (nom, description)
 VALUES ('Projet A', 'Projet de développement d une application mobile'),
-       ('Projet B', 'Projet de mise en place d un système de gestion de base de données');
+       ('Projet B', 'Projet de mise en place d un système de gestion de base de données'),
+       ('Projet C', 'Projet vide en cours de création');
 
 INSERT INTO ProjetRelease (nomProjet, nom, sortiePrévue, sortieEffective)
 VALUES ('Projet A', 'Release 1', '2022-01-01', '2022-03-01'),
@@ -259,7 +260,8 @@ VALUES ('Base de données', 'Tâches liées à la mise en place de la base de do
 
 INSERT INTO Utilisateur (nom, prénom, hashMdp, fonction)
 VALUES ('Smith', 'John', 'd404559f602eab6fd602ac7680dacbfaadd13630335e951f097af3900e9de176b6db28512f2e000b9d04fba5133e8b1c6e8df59db3a8ab9d60be4b97cc9e81db', 'Employé'),
-       ('Doe', 'Jane', 'd404559f602eab6fd602ac7680dacbfaadd13630335e951f097af3900e9de176b6db28512f2e000b9d04fba5133e8b1c6e8df59db3a8ab9d60be4b97cc9e81db', 'Directeur');
+       ('Doe', 'Jane', 'd404559f602eab6fd602ac7680dacbfaadd13630335e951f097af3900e9de176b6db28512f2e000b9d04fba5133e8b1c6e8df59db3a8ab9d60be4b97cc9e81db', 'Directeur'),
+	   ('Employé', 'Nouveau', 'd404559f602eab6fd602ac7680dacbfaadd13630335e951f097af3900e9de176b6db28512f2e000b9d04fba5133e8b1c6e8df59db3a8ab9d60be4b97cc9e81db', 'Employé');
 
 INSERT INTO Tâche (titre, description, delai, statut, dureeEstimée, dureeRéelle, nomProjetRelease, nomProjet,
                    nomGroupeDeTâche, idUtilisateur)

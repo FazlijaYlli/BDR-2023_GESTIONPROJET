@@ -47,6 +47,9 @@ if (!isset($_SESSION['userid'])) {
         case 'newprojet':
             newprojet();
             break;
+        case 'addUser' :
+            addUser();
+            break;
         default:
             home();
             break;

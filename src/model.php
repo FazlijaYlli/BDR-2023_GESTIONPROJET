@@ -112,6 +112,14 @@ function getUsers()
     return $result;
 }
 
+function getGroupesTache()
+{
+    $query = "SELECT nom FROM groupedetâche";
+    $result = pg_query($GLOBALS["db"], $query);
+    return $result;
+}
+
+
 function addToProject($projetname, $userIdToAdd, $role)
 {
     $query = "INSERT INTO Utilisateur_Projet (idUtilisateur, nomProjet, responsabilité) VALUES ($1, $2, $3)";
@@ -125,10 +133,10 @@ function getUserRole($idUtilisateur, $nomProjet)
     return pg_query_params($GLOBALS["db"], $query, $params);
 }
 
-function createTache($titre, $description, $delai, $dureeestimée)
+function createTache($titre, $description, $delai, $dureeestimée, $groupeTache, $nomprojet, $nomrelease)
 {
-    $query = "INSERT INTO Tâche (titre, description, delai, dureeestimée, statut, nomprojet, nomprojetrelease)
-        VALUES ($1,$2,$3,$4,$5,$6,$7)";
-    $params = array($titre, $description, $delai, $dureeestimée,$_GET['projet'],$_GET['release']);
+    $query = "INSERT INTO Tâche (titre, description, delai, statut, dureeestimée, nomgroupedetâche, nomprojet, nomprojetrelease)
+        VALUES ($1,$2,$3,$4,$5,$6,$7,$8)";
+    $params = array($titre, $description, $delai, 'Planifié', $dureeestimée,  $groupeTache, $nomprojet, $nomrelease);
     pg_query_params($GLOBALS["db"], $query, $params);
 }

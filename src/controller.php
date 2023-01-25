@@ -146,11 +146,18 @@ function release(): void
 
     while ($responsable = pg_fetch_assoc($result)){
         if($responsable['id'] == $_SESSION['userid']){
-            require 'views/createTache.php';
+
+            $groupesTache = pg_fetch_all(getGroupesTache());
+
+            if (!$groupesTache) {
+                require 'views/error.php';
+                exit;
+            }
+
+            require 'views/addTache.php';
+            break;
         }
-    };
-
-
+    }
 
 }
 
@@ -241,7 +248,7 @@ function addUser(){
     header('Location: ?action=projet&projet='.$_POST['projetname']);
 }
 function newTache(){
-    createTache($_POST['titre'],$_POST['description'],$_POST['delai'],$_POST['dureeestimée']);
+    createTache($_POST['titre'],$_POST['description'],$_POST['delai'],$_POST['dureeestimée'],$_POST['groupeTache'],$_POST['projet'],$_POST['release']);
     header('Location: ?action=release&projet='.$_POST['projet'].'&release='.$_POST['release']);
 }
 

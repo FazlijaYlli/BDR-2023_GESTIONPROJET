@@ -186,7 +186,7 @@ function checkPassword($username, $password)
 }
 
 function newprojet(){
-    creatProjet($_POST['nameP'],$_POST['descriptionP']);
+    createProjet($_POST['nameP'],$_POST['descriptionP']);
     header('Location: ?action=projetList');
 }
 

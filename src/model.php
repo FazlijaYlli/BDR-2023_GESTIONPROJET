@@ -81,7 +81,7 @@ function getTacheInfo(string $idTache)
     return $result;
 }
 
-function creatProjet($name, $description)
+function createProjet($name, $description)
 {
     $query = "INSERT INTO Projet (nom, description)
         VALUES ('$name', '$description')";

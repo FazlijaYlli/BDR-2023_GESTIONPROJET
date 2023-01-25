@@ -19,26 +19,68 @@ function projet(){
     $projet = pg_fetch_assoc($result);
 
     require 'views/projet.php';
+
+    releaseList($_GET['projet']);
 }
 
 function projetList()
 {
     $result = getProjets();
+
+    if (!$result) {
+        require 'views/error.php';
+        exit;
+    }
+
     $projets = pg_fetch_all($result);
-    require 'views/projetList.php';
+
+    if (!$projets) {
+        $noRessource = "projets";
+        require 'views/noRessource.php';
+        exit;
+    } else {
+        require 'views/projetList.php';
+    }
+}
+function releaseList(string $nomProjet)
+{
+    $result = getReleases($nomProjet);
+
+    if (!$result) {
+        require 'views/error.php';
+        exit;
+    }
+
+    $releases = pg_fetch_all($result);
+
+    if (!$releases) {
+        $noRessource = "releases";
+        require 'views/noRessource.php';
+        exit;
+    } else {
+        require 'views/releaseList.php';
+    }
 }
 
-function listTaches(string $projet, string $release){
-    $result = getListTacheInfo($projet, $release);
+function tacheList(string $projet, string $release){
+    $result = getTaches($projet, $release);
 
     if (!$result) {
         require 'views/error.php';
         return false;
     }
 
-    return $result;
+    $taches = pg_fetch_all($result);
+
+    if (!$taches) {
+        $noRessource = "tâches";
+        require 'views/noRessource.php';
+        exit;
+    } else {
+        require 'views/tacheList.php';
+    }
 }
-function releaseProjet(): void
+function release(): void
 {
     $result = getReleaseInfo($_GET['projet'],$_GET['release']);
 
@@ -56,17 +98,7 @@ function releaseProjet(): void
 
     require 'views/release.php';
 
-    $taches = listTaches($_GET['projet'],$_GET['release']);
-
-    if(!$taches){
-        require 'views/noTaches.php';
-        exit;
-    }
-
-    while ($tache = pg_fetch_assoc($taches)) {
-        $TASK_DETAILS = false;
-        require 'views/tache.php';
-    }
+    tacheList($_GET['projet'],$_GET['release']);
 }
 
 function tache(): void
@@ -85,7 +117,6 @@ function tache(): void
         exit;
     }
 
-    $TASK_DETAILS = true;
     require 'views/tache.php';
 
 }

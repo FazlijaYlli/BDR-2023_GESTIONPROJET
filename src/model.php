@@ -22,6 +22,16 @@ function getProjets()
     return $result;
 }
 
+// Requête pour récupérer les informations d'une liste de releases
+function getReleases(string $nomProjet)
+{
+    $query = "SELECT nom, nomprojet, sortieeffective, sortieprévue FROM projetrelease WHERE nomprojet = $1";
+    $params = array($nomProjet);
+
+    $result = pg_query_params($GLOBALS["db"], $query, $params);
+    return $result;
+}
+
 function getUserWithCredential($username, $password)
 {
     $hash = hash("sha512", $password);
@@ -45,9 +55,9 @@ function getReleaseInfo(string $nomProjet, string $nomRelease)
 
 
 // Requête pour récupérer les informations d'une liste de tache d'une release
-function getListTacheInfo(string $nomProjet, string $nomRelease)
+function getTaches(string $nomProjet, string $nomRelease)
 {
-    $query = "SELECT * FROM tâche WHERE nomprojet=$1 AND nomprojetrelease=$2 ORDER BY statut ASC";
+    $query = "SELECT * FROM tâche WHERE nomprojet=$1 AND nomprojetrelease=$2 ORDER BY delai ASC";
     $params = array($nomProjet,$nomRelease);
 
     $result = pg_query_params($GLOBALS["db"], $query, $params);

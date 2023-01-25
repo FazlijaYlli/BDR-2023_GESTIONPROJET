@@ -1,0 +1,1 @@
+<p>Aucune <?= $noRessource ?>.</p>

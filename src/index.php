@@ -19,7 +19,7 @@ require_once "controller.php";
 require 'views/header.php';
 
 
-if (false){//!isset($_SESSION['userid'])) {
+if (!isset($_SESSION['userid'])) {
     login();
 }else{
     if (isset($_GET['action'])) {
@@ -43,6 +43,9 @@ if (false){//!isset($_SESSION['userid'])) {
             break;
         case 'tache':
             tache();
+            break;
+        case 'newprojet':
+            newprojet();
             break;
         default:
             home();

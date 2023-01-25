@@ -23,7 +23,7 @@ function projet(){
 
 function projetList()
 {
-    $result = getProjets();
+    $result = getProjets($_SESSION['userid']);
     $projets = pg_fetch_all($result);
     require 'views/projetList.php';
 }
@@ -127,6 +127,7 @@ function tryLogin(){
         login();
     }else{
         $_SESSION['userid'] = $res['id'];
+        $_SESSION['admin'] = $res['fonction'] == 'Directeur';
         echo "Vous êtes connecté";
         header('Location: ?action=projetList');
     }
@@ -137,5 +138,10 @@ function checkPassword($username, $password)
     $result = getUserWithCredential($username, $password);
     $user = pg_fetch_assoc($result);
     return $user;
+}
+
+function newprojet(){
+    creatProjet($_POST['nameP'],$_POST['descriptionP']);
+    header('Location: ?action=projetList');
 }
 

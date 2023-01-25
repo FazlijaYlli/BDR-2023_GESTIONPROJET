@@ -13,9 +13,15 @@ function getProjetInfo(string $nomProjet)
     return $result;
 }
 
-function getProjets()
+function getProjets($idUser)
 {
-    $query = "SELECT nom, description FROM projet";
+
+    $query = "SELECT DISTINCT projet.nom AS nom FROM projet
+        LEFT JOIN utilisateur_projet
+        ON projet.nom = utilisateur_projet.nomprojet
+        CROSS JOIN utilisateur
+        WHERE utilisateur.id = $idUser
+        AND (utilisateur.id = utilisateur_projet.idutilisateur OR utilisateur.fonction = 'Directeur')";
     $params = array();
 
     $result = pg_query_params($GLOBALS["db"], $query, $params);
@@ -25,7 +31,7 @@ function getProjets()
 function getUserWithCredential($username, $password)
 {
     $hash = hash("sha512", $password);
-    $query = "SELECT id, nom, prénom FROM utilisateur WHERE  CONCAT (prénom,'.', nom) = $1 AND hashmdp = $2";
+    $query = "SELECT id, nom, prénom, fonction FROM utilisateur WHERE  CONCAT (prénom,'.', nom) = $1 AND hashmdp = $2";
     $params = array($username,$hash);
 
     $result = pg_query_params($GLOBALS["db"], $query, $params);
@@ -63,5 +69,12 @@ function getTacheInfo(string $idTache)
 
     $result = pg_query_params($GLOBALS["db"], $query, $params);
     return $result;
+}
+
+function creatProjet($name, $description)
+{
+    $query = "INSERT INTO Projet (nom, description)
+        VALUES ('$name', '$description')";
+    pg_query($GLOBALS["db"], $query);
 }
 

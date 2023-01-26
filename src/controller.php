@@ -116,7 +116,6 @@ function tacheList(string $projet, string $release){
     if (!$taches) {
         $noRessource = "tâches";
         require 'views/noRessource.php';
-        exit;
     } else {
         require 'views/tacheList.php';
     }
@@ -150,10 +149,20 @@ function release(): void
         require 'views/noRessource.php';
         exit;
     }
-
     $responsable = $roleFetch['responsabilité'] == "Responsable";
 
     require 'views/release.php';
+
+    if($responsable) {
+        $groupesTache = pg_fetch_all(getGroupesTache());
+
+        if (!$groupesTache) {
+            require 'views/error.php';
+            exit;
+        }
+
+        require 'views/addTache.php';
+    }
 
     tacheList($_GET['projet'],$_GET['release']);
 
@@ -163,22 +172,6 @@ function release(): void
         require 'views/error.php';
         exit;
     }
-
-    while ($responsable = pg_fetch_assoc($result)){
-        if($responsable['id'] == $_SESSION['userid']){
-
-            $groupesTache = pg_fetch_all(getGroupesTache());
-
-            if (!$groupesTache) {
-                require 'views/error.php';
-                exit;
-            }
-
-            require 'views/addTache.php';
-            break;
-        }
-    }
-
 }
 
 function tache(): void

@@ -306,9 +306,9 @@ function dateToFrench($date, $format)
 
 function addHoliday()
 {
-    createHoliday($_POST["debut"], $_POST["fin"],$_GET["id"]);
-    header('Location: ?action=userInfo&id='.$_GET["id"]);
-
+    createHoliday($_POST["debut"], $_POST["fin"], $_GET["id"]);
+    header('Location: ?action=userInfo&id=' . $_GET["id"]);
+}
 function closeRelease() {
     terminateRelease();
     header('Location: ?action=release&projet='.$_GET['projet'].'&release='.$_GET['release']);

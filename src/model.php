@@ -167,3 +167,26 @@ function updateTacheStatus($type,$idTache, $idUser)
     }
     pg_query_params($GLOBALS["db"], $query, $params);
 }
+
+function getUserById($id)
+{
+    $query = "SELECT id, nom, prénom FROM utilisateur WHERE id = $1";
+    $params = array($id);
+    $result = pg_query_params($GLOBALS["db"], $query, $params);
+    return $result;
+}
+
+function getUserHoliday($idUser)
+{
+    $query = "SELECT debut, fin, statut FROM vCongé WHERE idutilisateur = $1";
+    $params = array($idUser);
+    $result = pg_query_params($GLOBALS["db"], $query, $params);
+    return $result;
+}
+
+function createHoliday($debut, $fin, $id)
+{
+    $query = "INSERT INTO Congé (idUtilisateur, debut, fin) VALUES ($1, $2, $3)";
+    $params = array($id, $debut, $fin);
+    pg_query_params($GLOBALS["db"], $query, $params);
+}

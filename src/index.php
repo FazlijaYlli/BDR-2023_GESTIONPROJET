@@ -18,7 +18,6 @@ require_once "controller.php";
 <?php
 require 'views/header.php';
 
-
 if (!isset($_SESSION['userid'])) {
     login();
 }else{
@@ -58,6 +57,15 @@ if (!isset($_SESSION['userid'])) {
             break;
         case 'actionTache':
             actionTache();
+            break;
+        case 'userList':
+            userList();
+            break;
+        case 'userInfo':
+            userInfo();
+            break;
+        case 'addHoliday':
+            addHoliday();
             break;
         default:
             home();

@@ -70,7 +70,7 @@ CREATE TABLE Tâche
     nomProjetRelease VARCHAR(64)   NOT NULL,
     nomProjet        VARCHAR(64)   NOT NULL,
     nomGroupeDeTâche VARCHAR(64),
-    idUtilisateur    INT,
+    idUtilisateur    INT           NOT NULL,
     CONSTRAINT PK_Tâche PRIMARY KEY (id),
 
     CONSTRAINT FK_ProjetRelease_nomProjet_nom
@@ -232,6 +232,14 @@ CREATE TABLE Utilisateur_Projet
     CONSTRAINT CK_Utilisateur_Projet_responsabilité CHECK (responsabilité = 'Responsable' OR responsabilité = 'Employé')
 );
 
+CREATE VIEW vCongé AS 
+	SELECT debut, fin, idutilisateur,
+		CASE WHEN CURRENT_DATE BETWEEN debut AND fin THEN 'En cours'
+		WHEN fin < CURRENT_DATE THEN 'Terminée'
+		ELSE 'Futur' END  AS statut
+	FROM congé
+	ORDER BY statut ASC, ABS(EXTRACT (DAY FROM debut::timestamp - CURRENT_DATE::timestamp)) ASC 
+
 INSERT INTO CatégorieDeCompétence (nom)
 VALUES ('Développement'),
        ('Base de données'),
@@ -306,6 +314,10 @@ VALUES (1, 1),
 
 INSERT INTO Congé (idUtilisateur, debut, fin)
 VALUES (1, '2022-05-01', '2022-05-05'),
+       (1, '2023-01-20', '2023-04-20'),
+	   (1, '2023-12-11', '2023-12-17'),
+	   (1, '2025-06-20', '2025-07-02'),
+	   (1, '2021-02-03', '2021-02-04'),
        (2, '2022-06-01', '2022-06-15');
 
 INSERT INTO Utilisateur_Projet (idUtilisateur, nomProjet, responsabilité)

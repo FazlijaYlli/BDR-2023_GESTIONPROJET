@@ -71,6 +71,10 @@ function releaseList(string $nomProjet)
 
     $responsable = $roleFetch['responsabilité'] == "Responsable";
 
+    if ($responsable) {
+        include_once "views/formRelease.php";
+    }
+
     $releases = pg_fetch_all($result);
 
     if (!$releases) {

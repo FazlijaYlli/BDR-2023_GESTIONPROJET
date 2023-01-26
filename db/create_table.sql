@@ -238,7 +238,7 @@ CREATE VIEW vCongé AS
 		WHEN fin < CURRENT_DATE THEN 'Terminée'
 		ELSE 'Futur' END  AS statut
 	FROM congé
-	ORDER BY statut ASC, ABS(EXTRACT (DAY FROM debut::timestamp - CURRENT_DATE::timestamp)) ASC 
+	ORDER BY statut ASC, ABS(EXTRACT (DAY FROM debut::timestamp - CURRENT_DATE::timestamp)) ASC;
 
 INSERT INTO CatégorieDeCompétence (nom)
 VALUES ('Développement'),

@@ -71,6 +71,10 @@ function releaseList(string $nomProjet)
 
     $responsable = $roleFetch['responsabilité'] == "Responsable";
 
+    if ($responsable) {
+        include_once "views/formRelease.php";
+    }
+
     $releases = pg_fetch_all($result);
 
     if (!$releases) {
@@ -132,6 +136,22 @@ function release(): void
         require 'views/unknown.php';
         exit;
     }
+
+    $roleQuery = getUserRole($_SESSION['userid'], $_GET['projet']);
+    if(!$roleQuery) {
+        require 'views/error.php';
+        exit;
+    }
+
+    $roleFetch = pg_fetch_assoc($roleQuery);
+
+    if(!$roleFetch) {
+        $noRessource = "utilisateurs";
+        require 'views/noRessource.php';
+        exit;
+    }
+
+    $responsable = $roleFetch['responsabilité'] == "Responsable";
 
     require 'views/release.php';
 
@@ -288,5 +308,9 @@ function addHoliday()
 {
     createHoliday($_POST["debut"], $_POST["fin"],$_GET["id"]);
     header('Location: ?action=userInfo&id='.$_GET["id"]);
+
+function closeRelease() {
+    terminateRelease();
+    header('Location: ?action=release&projet='.$_GET['projet'].'&release='.$_GET['release']);
 }
 

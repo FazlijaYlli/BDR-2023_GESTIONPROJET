@@ -49,6 +49,9 @@ if (!isset($_SESSION['userid'])) {
         case 'newrelease':
             newrelease();
             break;
+        case 'closerelease':
+            closeRelease();
+            break;
         case 'addUser' :
             addUser();
             break;

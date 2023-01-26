@@ -63,7 +63,12 @@ function getReleaseInfo(string $nomProjet, string $nomRelease)
 // Requête pour récupérer les informations d'une liste de tache d'une release
 function getTaches(string $nomProjet, string $nomRelease)
 {
-    $query = "SELECT * FROM tâche WHERE nomprojet=$1 AND nomprojetrelease=$2 ORDER BY delai ASC";
+    $query = "SELECT tâche.id, titre, description, delai, statut, dureeestimée, dureeréelle,
+                     nomprojetrelease, nomprojet, nomgroupedetâche, idutilisateur, 
+                     utilisateur.prénom AS userprénom, utilisateur.nom AS usernom
+              FROM tâche 
+              LEFT JOIN utilisateur on tâche.idutilisateur = utilisateur.id
+              WHERE nomprojet=$1 AND nomprojetrelease=$2 ORDER BY delai ASC";
     $params = array($nomProjet,$nomRelease);
 
     $result = pg_query_params($GLOBALS["db"], $query, $params);
@@ -74,7 +79,12 @@ function getTaches(string $nomProjet, string $nomRelease)
 // Requête pour récupérer les informations d'une tâche
 function getTacheInfo(string $idTache)
 {
-    $query = "SELECT * FROM tâche WHERE id=$1";
+    $query = "SELECT tâche.id, titre, description, delai, statut, dureeestimée, dureeréelle,
+                     nomprojetrelease, nomprojet, nomgroupedetâche, idutilisateur, 
+                     utilisateur.prénom AS userprénom, utilisateur.nom AS usernom
+              FROM tâche 
+              LEFT JOIN utilisateur on tâche.idutilisateur = utilisateur.id
+              WHERE tâche.id=$1";
     $params = array($idTache);
 
     $result = pg_query_params($GLOBALS["db"], $query, $params);

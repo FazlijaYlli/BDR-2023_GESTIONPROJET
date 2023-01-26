@@ -167,3 +167,9 @@ function updateTacheStatus($type,$idTache, $idUser)
     }
     pg_query_params($GLOBALS["db"], $query, $params);
 }
+
+function terminateRelease() {
+    $query = "UPDATE projetrelease SET sortieeffective = NOW() WHERE nomProjet = $1 AND nom = $2";
+    $params = array($_GET['projet'],$_GET['release']);
+    pg_query_params($GLOBALS["db"], $query, $params);
+}

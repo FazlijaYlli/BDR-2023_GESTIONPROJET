@@ -133,6 +133,22 @@ function release(): void
         exit;
     }
 
+    $roleQuery = getUserRole($_SESSION['userid'], $_GET['projet']);
+    if(!$roleQuery) {
+        require 'views/error.php';
+        exit;
+    }
+
+    $roleFetch = pg_fetch_assoc($roleQuery);
+
+    if(!$roleFetch) {
+        $noRessource = "utilisateurs";
+        require 'views/noRessource.php';
+        exit;
+    }
+
+    $responsable = $roleFetch['responsabilité'] == "Responsable";
+
     require 'views/release.php';
 
     tacheList($_GET['projet'],$_GET['release']);
@@ -255,5 +271,10 @@ function newTache(){
 function actionTache(){
     updateTacheStatus($_POST['type'],$_POST['idTache'],$_SESSION['userid']);
     header('Location: ?action=release&projet='.$_POST['projet'].'&release='.$_POST['release']);
+}
+
+function closeRelease() {
+    terminateRelease();
+    header('Location: ?action=release&projet='.$_GET['projet'].'&release='.$_GET['release']);
 }
 

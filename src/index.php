@@ -70,6 +70,9 @@ if (!isset($_SESSION['userid'])) {
         case 'addHoliday':
             addHoliday();
             break;
+        case 'comment':
+            comment();
+            break;
         default:
             home();
             break;

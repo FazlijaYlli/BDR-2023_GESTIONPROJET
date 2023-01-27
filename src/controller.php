@@ -116,7 +116,6 @@ function tacheList(string $projet, string $release){
     if (!$taches) {
         $noRessource = "tâches";
         require 'views/noRessource.php';
-        exit;
     } else {
         require 'views/tacheList.php';
     }
@@ -150,10 +149,20 @@ function release(): void
         require 'views/noRessource.php';
         exit;
     }
-
     $responsable = $roleFetch['responsabilité'] == "Responsable";
 
     require 'views/release.php';
+
+    if($responsable) {
+        $groupesTache = pg_fetch_all(getGroupesTache());
+
+        if (!$groupesTache) {
+            require 'views/error.php';
+            exit;
+        }
+
+        require 'views/addTache.php';
+    }
 
     tacheList($_GET['projet'],$_GET['release']);
 
@@ -163,22 +172,6 @@ function release(): void
         require 'views/error.php';
         exit;
     }
-
-    while ($responsable = pg_fetch_assoc($result)){
-        if($responsable['id'] == $_SESSION['userid']){
-
-            $groupesTache = pg_fetch_all(getGroupesTache());
-
-            if (!$groupesTache) {
-                require 'views/error.php';
-                exit;
-            }
-
-            require 'views/addTache.php';
-            break;
-        }
-    }
-
 }
 
 function tache(): void
@@ -194,11 +187,16 @@ function tache(): void
 
     if (!$tache) {
         require 'views/unknown.php';
-        exit;
+        return;
     }
 
-    require 'views/tache.php';
+    $result = getComments($_GET['id']);
+    $comments = pg_fetch_all($result);
 
+    $result = getRequiredTask($_GET['id']);
+    $required = pg_fetch_all($result);
+
+    require 'views/tache.php';
 }
 
 function custom(){
@@ -312,5 +310,11 @@ function addHoliday()
 function closeRelease() {
     terminateRelease();
     header('Location: ?action=release&projet='.$_GET['projet'].'&release='.$_GET['release']);
+}
+
+function comment()
+{
+    addComment($_POST['idTache'], $_POST["comment"],$_SESSION['userid']);
+    header('Location: ?action=tache&id='.$_POST['idTache']);
 }
 

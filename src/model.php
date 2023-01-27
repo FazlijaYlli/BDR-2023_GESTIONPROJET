@@ -196,3 +196,39 @@ function terminateRelease() {
     $params = array($_GET['projet'],$_GET['release']);
     pg_query_params($GLOBALS["db"], $query, $params);
 }
+
+function addComment($idTache, $comment, $userid){
+    $query = "INSERT INTO Commentaire (idTâche, idUtilisateur, contenu, datecréation) VALUES ($1, $2, $3, NOW()::timestamp(0))";
+    $params = array($idTache, $userid, $comment);
+    pg_query_params($GLOBALS["db"], $query, $params);
+}
+
+function getComments($idTache){
+    $query = "SELECT utilisateur.prénom, utilisateur.nom, commentaire.contenu as comment, commentaire.datecréation AS date FROM commentaire
+        INNER JOIN utilisateur
+        ON commentaire.idutilisateur = utilisateur.id
+        WHERE commentaire.idtâche = $1
+        ORDER BY date DESC";
+    $params = array($idTache);
+    $result = pg_query_params($GLOBALS["db"], $query, $params);
+    return $result;
+}
+
+function getRequiredTask($idTask){
+    $query = "WITH RECURSIVE tâches_requises(requise, debloquée) AS ( 
+      SELECT requise, debloquée FROM Tâche_Tâche WHERE debloquée = $1
+      UNION 
+      SELECT Tâche_Tâche.requise, tâches_requises.requise 
+      FROM tâches_requises 
+      INNER JOIN Tâche_Tâche ON tâches_requises.requise = Tâche_Tâche.debloquée 
+    ) 
+    SELECT tâche.id, tâche.titre, tâche.statut FROM tâches_requises
+    INNER JOIN tâche ON tâche.id = requise
+    WHERE tâche.statut <> 'Terminé'";
+
+    $params = array($idTask);
+    $result = pg_query_params($GLOBALS["db"], $query, $params);
+    return $result;
+}
+
+

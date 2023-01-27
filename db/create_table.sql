@@ -70,7 +70,7 @@ CREATE TABLE Tâche
     nomProjetRelease VARCHAR(64)   NOT NULL,
     nomProjet        VARCHAR(64)   NOT NULL,
     nomGroupeDeTâche VARCHAR(64),
-    idUtilisateur    INT           NOT NULL,
+    idUtilisateur    INT,
     CONSTRAINT PK_Tâche PRIMARY KEY (id),
 
     CONSTRAINT FK_ProjetRelease_nomProjet_nom

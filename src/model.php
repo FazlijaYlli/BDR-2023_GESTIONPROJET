@@ -196,3 +196,20 @@ function terminateRelease() {
     $params = array($_GET['projet'],$_GET['release']);
     pg_query_params($GLOBALS["db"], $query, $params);
 }
+
+function addComment($idTache, $comment, $userid){
+    $query = "INSERT INTO Commentaire (idTâche, idUtilisateur, contenu, datecréation) VALUES ($1, $2, $3, NOW()::timestamp(0))";
+    $params = array($idTache, $userid, $comment);
+    pg_query_params($GLOBALS["db"], $query, $params);
+}
+
+function getComments($idTache){
+    $query = "SELECT utilisateur.prénom, utilisateur.nom, commentaire.contenu as comment, commentaire.datecréation AS date FROM commentaire
+        INNER JOIN utilisateur
+        ON commentaire.idutilisateur = utilisateur.id
+        WHERE commentaire.idtâche = $1
+        ORDER BY date DESC";
+    $params = array($idTache);
+    $result = pg_query_params($GLOBALS["db"], $query, $params);
+    return $result;
+}

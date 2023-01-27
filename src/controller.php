@@ -187,11 +187,14 @@ function tache(): void
 
     if (!$tache) {
         require 'views/unknown.php';
-        exit;
+        return;
     }
 
-    require 'views/tache.php';
+    $result = getComments($_GET['id']);
 
+    $comments = pg_fetch_all($result);
+
+    require 'views/tache.php';
 }
 
 function custom(){
@@ -305,5 +308,11 @@ function addHoliday()
 function closeRelease() {
     terminateRelease();
     header('Location: ?action=release&projet='.$_GET['projet'].'&release='.$_GET['release']);
+}
+
+function comment()
+{
+    addComment($_POST['idTache'], $_POST["comment"],$_SESSION['userid']);
+    header('Location: ?action=tache&id='.$_POST['idTache']);
 }
 

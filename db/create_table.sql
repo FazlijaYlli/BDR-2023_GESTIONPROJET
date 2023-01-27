@@ -1,9 +1,11 @@
+DROP TABLE IF EXISTS CatégorieDeCompétence CASCADE;
 CREATE TABLE CatégorieDeCompétence
 (
     nom VARCHAR(64),
     CONSTRAINT PK_CatégorieDeCompétence PRIMARY KEY (nom)
 );
 
+DROP TABLE IF EXISTS Compétence CASCADE;
 CREATE TABLE Compétence
 (
     nom                   VARCHAR(64),
@@ -17,6 +19,7 @@ CREATE TABLE Compétence
             ON DELETE NO ACTION
 );
 
+DROP TABLE IF EXISTS Projet CASCADE;
 CREATE TABLE Projet
 (
     nom         VARCHAR(64),
@@ -24,6 +27,7 @@ CREATE TABLE Projet
     CONSTRAINT PK_Projet PRIMARY KEY (nom)
 );
 
+DROP TABLE IF EXISTS ProjetRelease CASCADE;
 CREATE TABLE ProjetRelease
 (
     nomProjet       VARCHAR(64),
@@ -38,6 +42,7 @@ CREATE TABLE ProjetRelease
             ON DELETE CASCADE
 );
 
+DROP TABLE IF EXISTS GroupeDeTâche CASCADE;
 CREATE TABLE GroupeDeTâche
 (
     nom         VARCHAR(64),
@@ -45,6 +50,7 @@ CREATE TABLE GroupeDeTâche
     CONSTRAINT PK_GroupeDeTâche PRIMARY KEY (nom)
 );
 
+DROP TABLE IF EXISTS Utilisateur CASCADE;
 CREATE TABLE Utilisateur
 (
     id       SERIAL,
@@ -58,6 +64,7 @@ CREATE TABLE Utilisateur
     CONSTRAINT CK_Utilisateur_fonction CHECK (fonction = 'Employé' OR fonction = 'Directeur')
 );
 
+DROP TABLE IF EXISTS Tâche CASCADE;
 CREATE TABLE Tâche
 (
     id               SERIAL,
@@ -70,7 +77,7 @@ CREATE TABLE Tâche
     nomProjetRelease VARCHAR(64)   NOT NULL,
     nomProjet        VARCHAR(64)   NOT NULL,
     nomGroupeDeTâche VARCHAR(64),
-    idUtilisateur    INT           NOT NULL,
+    idUtilisateur    INT,
     CONSTRAINT PK_Tâche PRIMARY KEY (id),
 
     CONSTRAINT FK_ProjetRelease_nomProjet_nom
@@ -89,9 +96,12 @@ CREATE TABLE Tâche
         FOREIGN KEY (idUtilisateur)
             REFERENCES Utilisateur (id)
             ON UPDATE CASCADE
-            ON DELETE NO ACTION
+            ON DELETE NO ACTION,
+
+    CONSTRAINT CK_Tâche_Statut CHECK (statut = 'Planifié' OR statut = 'Terminé' OR statut = 'En cours')
 );
 
+DROP TABLE IF EXISTS Tâche_Tâche CASCADE;
 CREATE TABLE Tâche_Tâche
 (
     requise   INT,
@@ -110,6 +120,7 @@ CREATE TABLE Tâche_Tâche
             ON DELETE CASCADE
 );
 
+DROP TABLE IF EXISTS Tâche_Compétence CASCADE;
 CREATE TABLE Tâche_Compétence
 (
     idTâche       INT,
@@ -132,6 +143,7 @@ CREATE TABLE Tâche_Compétence
     CONSTRAINT CK_Tâche_Compétence_niveauRequis CHECK (niveauRequis < 3 AND niveauRequis >= 0)
 );
 
+DROP TABLE IF EXISTS Utilisateur_Compétence CASCADE;
 CREATE TABLE Utilisateur_Compétence
 (
     idUtilisateur INT,
@@ -154,6 +166,7 @@ CREATE TABLE Utilisateur_Compétence
     CONSTRAINT CK_Utilisateur_Compétence_niveauPossédé CHECK (niveauPossédé < 3 AND niveauPossédé >= 0)
 );
 
+DROP TABLE IF EXISTS Commentaire CASCADE;
 CREATE TABLE Commentaire
 (
     idUtilisateur INT,
@@ -175,6 +188,7 @@ CREATE TABLE Commentaire
             ON DELETE CASCADE
 );
 
+DROP TABLE IF EXISTS Utilisateur_Tâche CASCADE;
 CREATE TABLE Utilisateur_Tâche
 (
     idUtilisateur INT,
@@ -194,6 +208,7 @@ CREATE TABLE Utilisateur_Tâche
             ON DELETE CASCADE
 );
 
+DROP TABLE IF EXISTS Congé CASCADE;
 CREATE TABLE Congé
 (
     id            SERIAL,
@@ -209,6 +224,7 @@ CREATE TABLE Congé
             ON DELETE CASCADE
 );
 
+DROP TABLE IF EXISTS Utilisateur_Projet CASCADE;
 CREATE TABLE Utilisateur_Projet
 (
     idUtilisateur  INT,
@@ -240,6 +256,150 @@ CREATE VIEW vCongé AS
 	FROM congé
 	ORDER BY statut ASC, ABS(EXTRACT (DAY FROM debut::timestamp - CURRENT_DATE::timestamp)) ASC;
 
+CREATE OR REPLACE FUNCTION Verification_Action_Sur_Tache()
+    RETURNS TRIGGER AS
+$$
+BEGIN
+    IF NEW.statut = 'Terminée' THEN
+        IF NOT EXISTS(SELECT 1
+            FROM Utilisateur_Projet AS UP
+            INNER JOIN Tâche T on UP.idUtilisateur = T.idUtilisateur
+            INNER JOIN Utilisateur U on U.id = T.idUtilisateur
+            WHERE UP.nomprojet = NEW.nomProjet
+                AND UP.idutilisateur = NEW.idUtilisateur)
+        THEN
+            RAISE EXCEPTION 'Utilisateur est absent du projet ou n est pas le propriétaire de la tâche';
+        ELSE
+            RETURN NEW;
+        END IF;
+    ELSE
+        IF NEW.statut = 'En cours' THEN
+            IF NOT EXISTS(SELECT 1
+                FROM Utilisateur_Projet AS UP
+                INNER JOIN Tâche T on UP.idUtilisateur = T.idUtilisateur
+                INNER JOIN Utilisateur U on U.id = T.idUtilisateur
+                WHERE UP.nomprojet = NEW.nomProjet
+                  AND OLD.idutilisateur IS NULL
+                  AND NEW.idutilisateur IS NOT NULL)
+            THEN
+                RAISE EXCEPTION 'Utilisateur est absent du projet ou n est pas le propriétaire de la tâche';
+            ELSE
+                RETURN NEW;
+            END IF;
+        END IF;
+    END IF;
+END
+$$ LANGUAGE PLPGSQL;
+
+CREATE OR REPLACE TRIGGER Check_Action_Sur_Tache
+    BEFORE UPDATE
+    ON tâche
+    FOR EACH ROW
+EXECUTE FUNCTION Verification_Action_Sur_Tache();
+
+
+CREATE OR REPLACE FUNCTION Verification_Insertion_Commentaire()
+    RETURNS TRIGGER AS
+$$
+BEGIN
+        IF NOT EXISTS(SELECT 1
+                      FROM Commentaire
+                               INNER JOIN Tâche ON Commentaire.idTâche = Tâche.id
+                               INNER JOIN ProjetRelease ON Tâche.nomProjet = ProjetRelease.nomProjet
+                                                             AND Tâche.nomProjetRelease = ProjetRelease.nom
+                               INNER JOIN Utilisateur_Projet on Utilisateur_Projet.idUtilisateur = Commentaire.idUtilisateur
+                      WHERE Utilisateur_Projet.nomprojet = NEW.nomProjet
+                        AND Commentaire.idutilisateur = NEW.idUtilisateur)
+        THEN
+            RAISE EXCEPTION 'Utilisateur est absent du projet et ne peut pas commenter cette tâche';
+        ELSE
+            RETURN NEW;
+        END IF;
+END
+$$ LANGUAGE PLPGSQL;
+
+CREATE OR REPLACE TRIGGER Check_Ajout_Commentaire
+    BEFORE INSERT
+    ON commentaire
+    FOR EACH ROW
+EXECUTE FUNCTION Verification_Insertion_Commentaire();
+
+
+CREATE OR REPLACE FUNCTION Verification_Insertion_Projet()
+    RETURNS TRIGGER AS
+$$
+BEGIN
+    IF NOT EXISTS(SELECT 1
+                  FROM Utilisateur_Projet
+                  WHERE Utilisateur_Projet.nomprojet = NEW.nomProjet
+                    AND Utilisateur_Projet.responsabilité = 'Responsable')
+    THEN
+        RAISE EXCEPTION 'Un projet doit avoir au moins un responsable';
+    ELSE
+        RETURN NEW;
+    END IF;
+END
+$$ LANGUAGE PLPGSQL;
+
+CREATE OR REPLACE TRIGGER Check_Ajout_Projet
+    BEFORE INSERT
+    ON projet
+    FOR EACH ROW
+EXECUTE FUNCTION Verification_Insertion_Projet();
+
+
+CREATE OR REPLACE FUNCTION Verification_Insertion_Tâche()
+    RETURNS TRIGGER AS
+$$
+BEGIN
+    IF NOT EXISTS(SELECT 1
+                  FROM Tâche
+                  INNER JOIN Utilisateur_Projet on Tâche.idUtilisateur = Utilisateur_Projet.idUtilisateur
+                  WHERE Utilisateur_Projet.nomprojet = NEW.nomProjet
+                    AND Tâche.idutilisateur = NEW.idUtilisateur
+                    AND responsabilité = 'Responsable')
+    THEN
+        RAISE EXCEPTION 'Utilisateur est pas responsable de ce projet';
+    ELSE
+        RETURN NEW;
+    END IF;
+END
+$$ LANGUAGE PLPGSQL;
+
+CREATE OR REPLACE TRIGGER Check_Ajout_Tâche
+    BEFORE INSERT
+    ON Tâche
+    FOR EACH ROW
+EXECUTE FUNCTION Verification_Insertion_Tâche();
+
+
+CREATE OR REPLACE FUNCTION Verification_Insertion_Congé()
+    RETURNS TRIGGER AS
+$$
+BEGIN
+    IF NOT EXISTS(SELECT 1
+                  FROM Congé
+                  WHERE Congé.idUtilisateur = NEW.idUtilisateur
+                  AND EXISTS(SELECT 1
+                             FROM Congé
+                             WHERE Congé.idUtilisateur = NEW.idUtilisateur
+                             AND NEW.debut BETWEEN Congé.debut AND Congé.fin
+                             OR NEW.fin BETWEEN Congé.debut AND Congé.fin))
+    THEN
+        RAISE EXCEPTION 'Utilisateur est pas responsable de ce projet';
+    ELSE
+        RETURN NEW;
+    END IF;
+END
+$$ LANGUAGE PLPGSQL;
+
+CREATE OR REPLACE TRIGGER Check_Ajout_Congé
+    BEFORE INSERT
+    ON Congé
+    FOR EACH ROW
+EXECUTE FUNCTION Verification_Insertion_Congé();
+
+
 INSERT INTO CatégorieDeCompétence (nom)
 VALUES ('Développement'),
        ('Base de données'),
@@ -269,7 +429,7 @@ VALUES ('Base de données', 'Tâches liées à la mise en place de la base de do
 INSERT INTO Utilisateur (nom, prénom, hashMdp, fonction)
 VALUES ('Smith', 'John', 'd404559f602eab6fd602ac7680dacbfaadd13630335e951f097af3900e9de176b6db28512f2e000b9d04fba5133e8b1c6e8df59db3a8ab9d60be4b97cc9e81db', 'Employé'),
        ('Doe', 'Jane', 'd404559f602eab6fd602ac7680dacbfaadd13630335e951f097af3900e9de176b6db28512f2e000b9d04fba5133e8b1c6e8df59db3a8ab9d60be4b97cc9e81db', 'Directeur'),
-	   ('Employé', 'Nouveau', 'd404559f602eab6fd602ac7680dacbfaadd13630335e951f097af3900e9de176b6db28512f2e000b9d04fba5133e8b1c6e8df59db3a8ab9d60be4b97cc9e81db', 'Employé');
+	   ('Zoé', 'Gardoud', 'd404559f602eab6fd602ac7680dacbfaadd13630335e951f097af3900e9de176b6db28512f2e000b9d04fba5133e8b1c6e8df59db3a8ab9d60be4b97cc9e81db', 'Employé');
 
 INSERT INTO Tâche (titre, description, delai, statut, dureeEstimée, dureeRéelle, nomProjetRelease, nomProjet,
                    nomGroupeDeTâche, idUtilisateur)
@@ -323,5 +483,5 @@ VALUES (1, '2022-05-01', '2022-05-05'),
 INSERT INTO Utilisateur_Projet (idUtilisateur, nomProjet, responsabilité)
 VALUES (1, 'Projet A', 'Employé'),
        (2, 'Projet A', 'Responsable'),
-       (1, 'Projet B', 'Responsable'),
+       (3, 'Projet B', 'Responsable'),
        (2, 'Projet B', 'Employé');

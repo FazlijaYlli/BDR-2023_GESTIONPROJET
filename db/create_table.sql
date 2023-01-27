@@ -302,10 +302,10 @@ VALUES (1, 'SQL', 1),
        (2, 'SQL', 1);
 
 INSERT INTO Commentaire (idTâche, idUtilisateur, contenu, datecréation)
-VALUES (1, 1, 'Bonne avancée sur la mise en place de la base de données', '2022-02-15'),
-       (1, 2, 'Il y a des incohérences dans les relations des tables', '2022-02-20'),
-       (2, 2, 'L interface utilisateur est presque terminée', '2022-03-30'),
-       (2, 1, 'Il manque des fonctionnalités pour l interface utilisateur', '2022-04-01');
+VALUES (1, 1, 'Bonne avancée sur la mise en place de la base de données', '2022-02-15 13:58:10'),
+       (1, 2, 'Il y a des incohérences dans les relations des tables', '2022-02-20 15:32:12'),
+       (2, 2, 'L interface utilisateur est presque terminée', '2022-03-30 17:45:23'),
+       (2, 1, 'Il manque des fonctionnalités pour l interface utilisateur', '2022-04-01 10:18:59');
 
 INSERT INTO Utilisateur_Tâche (idUtilisateur, idTâche)
 VALUES (1, 1),
@@ -324,4 +324,5 @@ INSERT INTO Utilisateur_Projet (idUtilisateur, nomProjet, responsabilité)
 VALUES (1, 'Projet A', 'Employé'),
        (2, 'Projet A', 'Responsable'),
        (1, 'Projet B', 'Responsable'),
-       (2, 'Projet B', 'Employé');
+       (2, 'Projet B', 'Employé'),
+	   (1, 'Projet C', 'Responsable');

@@ -213,3 +213,22 @@ function getComments($idTache){
     $result = pg_query_params($GLOBALS["db"], $query, $params);
     return $result;
 }
+
+function getRequiredTask($idTask){
+    $query = "WITH RECURSIVE tâches_requises(requise, debloquée) AS ( 
+      SELECT requise, debloquée FROM Tâche_Tâche WHERE debloquée = $1
+      UNION 
+      SELECT Tâche_Tâche.requise, tâches_requises.requise 
+      FROM tâches_requises 
+      INNER JOIN Tâche_Tâche ON tâches_requises.requise = Tâche_Tâche.debloquée 
+    ) 
+    SELECT tâche.id, tâche.titre, tâche.statut FROM tâches_requises
+    INNER JOIN tâche ON tâche.id = requise
+    WHERE tâche.statut <> 'Terminé'";
+
+    $params = array($idTask);
+    $result = pg_query_params($GLOBALS["db"], $query, $params);
+    return $result;
+}
+
+

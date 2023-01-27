@@ -3,6 +3,12 @@
 </a>
 <span><?= $tache['statut'] ?></span>
 
+<?php if (count($required)): ?>
+    <?php foreach ($required as $req): ?>
+        <p><b>Tâche requise : </b><a href="http://localhost:8888/?action=tache&id=<?= $req['id']?>"><?= $req['titre']?></a> <?= $req['statut']?></p>
+    <?php endforeach; ?>
+<?php endif; ?>
+
 <p><?= $tache['description'] ?></p>
 <p><?= $tache['delai'] ?></p>
 <p><?= $tache['dureeestimée'] ?></p>

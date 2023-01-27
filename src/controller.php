@@ -191,8 +191,10 @@ function tache(): void
     }
 
     $result = getComments($_GET['id']);
-
     $comments = pg_fetch_all($result);
+
+    $result = getRequiredTask($_GET['id']);
+    $required = pg_fetch_all($result);
 
     require 'views/tache.php';
 }

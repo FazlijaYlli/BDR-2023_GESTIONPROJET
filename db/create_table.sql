@@ -1,6 +1,6 @@
-DROP SCHEMA IF EXISTS gestion_projet CASCADE;
-CREATE SCHEMA gestion_projet;
-SET SCHEMA 'gestion_projet';
+DROP SCHEMA IF EXISTS public CASCADE;
+CREATE SCHEMA public;
+SET SCHEMA 'public';
 
 DROP TABLE IF EXISTS CatégorieDeCompétence CASCADE;
 CREATE TABLE CatégorieDeCompétence

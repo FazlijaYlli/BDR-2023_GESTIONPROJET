@@ -184,3 +184,31 @@ CREATE OR REPLACE TRIGGER Check_Relation_Cyclique
     ON Tâche_Tâche
     FOR EACH ROW
 EXECUTE FUNCTION Verification_Relation_Cyclique_Tâches();
+
+
+
+CREATE OR REPLACE FUNCTION Verification_Insertion_Tâche_Tâches()
+    RETURNS TRIGGER AS
+$$
+BEGIN
+    IF NOT EXISTS(
+            SELECT requise, debloquée
+            FROM Tâche_Tâche
+            INNER JOIN Tâche AS TâcheRequise ON TâcheRequise.id = NEW.requise
+            INNER JOIN Tâche AS TâcheDebloqué ON TâcheDebloqué.id = NEW.debloquée
+            WHERE TâcheDebloqué.nomprojet = TâcheRequise.nomprojet
+        )
+    THEN
+        RAISE EXCEPTION 'La tâche requise doit appartenir au même projet';
+    ELSE
+        RETURN NEW;
+    END IF;
+END
+$$ LANGUAGE PLPGSQL;
+
+
+CREATE OR REPLACE TRIGGER Check_Insertion_Tâche_Tâches
+    BEFORE INSERT
+    ON Tâche_Tâche
+    FOR EACH ROW
+EXECUTE FUNCTION Verification_Insertion_Tâche_Tâches();

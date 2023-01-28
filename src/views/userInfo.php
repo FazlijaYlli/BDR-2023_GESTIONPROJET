@@ -12,10 +12,13 @@
 <?php endif; ?>
 
 <h3>Congés</h3>
-
-<?php foreach ($userHolidays as $userHoliday): ?>
-    <p>De : <?=dateToFrench($userHoliday['debut'],'l j F Y') ?> à <?=dateToFrench($userHoliday['fin'],'l j F Y') ?> (<?=$userHoliday['statut']?>)</p>
-<?php endforeach; ?>
+<?php if(count($userHolidays)): ?>
+    <?php foreach ($userHolidays as $userHoliday): ?>
+        <p>De : <?=dateToFrench($userHoliday['debut'],'l j F Y') ?> à <?=dateToFrench($userHoliday['fin'],'l j F Y') ?> (<?=$userHoliday['statut']?>)</p>
+    <?php endforeach; ?>
+<?php else: ?>
+    <p>Aucun</p>
+<?php endif; ?>
 
 
 

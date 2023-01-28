@@ -1,6 +1,4 @@
-<a href="?action=tache&id=<?=$tache['id']?>">
-    <h3><?= $tache['titre'] ?></h3>
-</a>
+<h3><?= $tache['titre'] ?></h3>
 <p>Statut : <?= $tache['statut'] ?></p>
 
 <?php if ($tache['statut'] != "Terminé"): ?>
@@ -25,7 +23,7 @@
 
 <?php if (count($required)): ?>
     <?php foreach ($required as $req): ?>
-        <p><b>Tâche requise : </b><a href="http://localhost:8888/?action=tache&id=<?= $req['id']?>"><?= $req['titre']?></a> <?= $req['statut']?></p>
+        <p><b>Tâche requise : </b><u><a href="http://localhost:8888/?action=tache&id=<?= $req['id']?>"><?= $req['titre']?></a></u> <?= $req['statut']?></p>
     <?php endforeach; ?>
     <br>
 <?php endif; ?>

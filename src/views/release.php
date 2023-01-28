@@ -1,8 +1,10 @@
 <h1><?=$release['nom']?></h1>
 
-<a href="?action=projet&projet=<?=$release['nomprojet']?>">
-    <h2><?= $release['nomprojet'] ?></h2>
-</a>
+<u>
+    <a href="?action=projet&projet=<?=$release['nomprojet']?>">
+        <h2><?= $release['nomprojet'] ?></h2>
+    </a>
+</u>
 
 <?php
 echo "<p>";

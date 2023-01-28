@@ -8,7 +8,7 @@
     <?php foreach ($releases as $release): ?>
         <tr>
             <td>
-                <a href="?action=release&projet=<?=$release['nomprojet']?>&release=<?=$release['nom']?>"><?=$release['nom']?></a>
+                <u><a href="?action=release&projet=<?=$release['nomprojet']?>&release=<?=$release['nom']?>"><?=$release['nom']?></a></u>
             </td>
             <td>
                 <?= $release['sortieprévue']?>

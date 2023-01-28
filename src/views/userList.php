@@ -6,7 +6,7 @@
     <?php foreach ($users as $user): ?>
         <?php if ($user['responsabilité']): ?>
             <tr>
-                <td><?= $user['prénom'] . ' ' . $user['nom']?></td>
+                <td><u><a href="?action=userInfo&id=<?= $user['id']?>"><?= $user['prénom'] . ' ' . $user['nom']?></a></u></td>
                 <td><?=$user['responsabilité']?></td>
             </tr>
         <?php endif; ?>

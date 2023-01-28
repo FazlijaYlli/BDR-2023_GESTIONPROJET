@@ -10,7 +10,7 @@
 <?php foreach ($taches as $tache): ?>
     <tr>
         <td>
-            <a href="?action=tache&id=<?=$tache['id']?>"><?= $tache['titre'] ?></a>
+            <u><a href="?action=tache&id=<?=$tache['id']?>"><?= $tache['titre'] ?></a></u>
         </td>
         <td>
             <?= $tache['delai']?>

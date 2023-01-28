@@ -10,7 +10,7 @@
     <input type="date" id="delai" name="delai"><br>
 
     <label for="dureeestimée">Durée estimée</label><br>
-    <input type="time" id="dureeestimée" name="dureeestimée" min="00:05:00" max="24:00:00"><br>
+    <input type="time" id="dureeestimée" name="dureeestimée" min="00:05:00" max="24:00:00" value="01:00:00"><br>
 
     <input name="projet" type="hidden" value="<?=$release['nomprojet'] ?>">
     <input name="release" type="hidden" value="<?=$release['nom']?>">

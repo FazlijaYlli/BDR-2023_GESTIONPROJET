@@ -22,6 +22,7 @@ function projet(){
 
     listUser($_GET['projet']);
 
+
     releaseList($_GET['projet']);
 }
 
@@ -64,8 +65,7 @@ function releaseList(string $nomProjet)
     $roleFetch = pg_fetch_assoc($roleQuery);
 
     if(!$roleFetch) {
-        $noRessource = "utilisateurs";
-        require 'views/noRessource.php';
+        echo "Aucun droit sur ce projet";
         exit;
     }
 

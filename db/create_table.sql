@@ -273,10 +273,10 @@ VALUES ('Smith', 'John', 'd404559f602eab6fd602ac7680dacbfaadd13630335e951f097af3
 
 INSERT INTO Tâche (titre, description, delai, statut, dureeEstimée, dureeRéelle, nomProjetRelease, nomProjet,
                    nomGroupeDeTâche, idUtilisateur)
-VALUES ('Mise en place de la base de données', 'Créer les tables et les relations nécessaires', '2022-02-01',
-        'En cours', '05:00:00', '04:00:00', 'Release 1', 'Projet A', 'Base de données', 1),
-       ('Développement de l interface utilisateur', 'Créer les écrans et les fonctionnalités nécessaires', '2022-04-01',
-        'Terminé', '15:00:00', NULL, 'Release 1', 'Projet A', 'UX Design', 2),
+VALUES ('Mise en place de la base de données', 'Créer les tables et les relations nécessaires', '2022-02-01', 'Terminé', '05:00:00', '04:00:00', 'Release 1', 'Projet A', 'Base de données', 1),
+       ('Développement de l interface utilisateur', 'Créer les écrans et les fonctionnalités nécessaires', '2022-04-01', 'En Cours', '15:00:00', NULL, 'Release 1', 'Projet A', 'UX Design', 2),
+       ('Effectuer les Tests sur l interface utilisateur', 'Effectuer les différents tests demandés', '2022-06-01', 'Planifié', '3:00:00', NULL, 'Release 1', 'Projet A', 'UX Design', NULL),
+       ('Corrections des bugs', 'Corriger les bugs mis en evidence durant la phase de test', '2022-08-01', 'Planifié', '15:00:00', NULL, 'Release 1', 'Projet A', 'UX Design', NULL),
 
        ('Mise en place de la base de données', 'Créer les tables et les relations nécessaires', '2022-02-01',
         'En cours', '03:00:00', NULL, 'Release 1', 'Projet B', 'Base de données', 1),
@@ -284,7 +284,7 @@ VALUES ('Mise en place de la base de données', 'Créer les tables et les relati
         'Terminé', '10:00:00', NULL, 'Release 1', 'Projet B', 'UX Design', 2);
 
 INSERT INTO Tâche_Tâche (requise, debloquée)
-VALUES (1, 2);
+VALUES (2, 3);
 
 INSERT INTO Tâche_Compétence (idTâche, nomCompétence, niveauRequis)
 VALUES (1, 'SQL', 1),

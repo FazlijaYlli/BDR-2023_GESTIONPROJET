@@ -1,5 +1,10 @@
 <h3><?= $tache['titre'] ?></h3>
-<p>Statut : <?= $tache['statut'] ?></p>
+<p>
+    Statut : <?= $tache['statut'] ?>
+    <?php if ($tache['idutilisateur']): ?>
+    (<u><a href="?action=userInfo&id=<?=$tache['idutilisateur'] ?>"><?=$tache['userprénom'] . ' ' . $tache['usernom'] ?></a></u>)
+    <?php endif; ?>
+</p>
 
 <?php if ($tache['statut'] != "Terminé"): ?>
     <?php if (count($getOtherImcompletTask)): ?>

@@ -1,12 +1,33 @@
 <a href="?action=tache&id=<?=$tache['id']?>">
     <h3><?= $tache['titre'] ?></h3>
 </a>
-<span>Statut : <?= $tache['statut'] ?></span>
+<p>Statut : <?= $tache['statut'] ?></p>
+
+<?php if ($tache['statut'] != "Terminé"): ?>
+    <?php if (count($getOtherImcompletTask)): ?>
+        <br>
+        <form action="?action=addRequirement" method="post">
+            <label for="requiredtoadd">Ajouter une tâche prérequise :</label><br>
+            <select name="requiredtoadd" id="requiredtoadd">
+                <option value="-1" selected disabled>-Sélectionner-</option>
+                <?php foreach ($getOtherImcompletTask as $otherTask): ?>
+                    <option value="<?=$otherTask['id']?>"><?=$otherTask['titre']?></option>
+                <?php endforeach; ?>
+            </select>
+            <input name="idTache" type="hidden" value="<?= $tache['id'] ?>">
+            <input type="submit" value="Ajouter">
+        </form>
+        <br>
+    <?php else: ?>
+        <p>Aucune autre tâche ne peut être ajoutée en prérequis</p>
+    <?php endif; ?>
+<?php endif; ?>
 
 <?php if (count($required)): ?>
     <?php foreach ($required as $req): ?>
         <p><b>Tâche requise : </b><a href="http://localhost:8888/?action=tache&id=<?= $req['id']?>"><?= $req['titre']?></a> <?= $req['statut']?></p>
     <?php endforeach; ?>
+    <br>
 <?php endif; ?>
 
 <p>Description : <?= $tache['description'] ?></p>

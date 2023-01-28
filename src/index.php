@@ -73,6 +73,9 @@ if (!isset($_SESSION['userid'])) {
         case 'comment':
             comment();
             break;
+        case 'addRequirement':
+            addRequirement();
+            break;
         default:
             home();
             break;

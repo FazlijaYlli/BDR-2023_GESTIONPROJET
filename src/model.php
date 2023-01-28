@@ -231,4 +231,32 @@ function getRequiredTask($idTask){
     return $result;
 }
 
+function getOtherImcompletTask($idTask){
+    $query = "SELECT t2.id, t2.titre FROM tâche t1
+        INNER JOIN tâche t2
+        ON t1.nomprojet = t2.nomprojet AND t1.id <> t2.id
+        WHERE t1.id = $1 AND t2.statut <> 'Terminé' AND t2.id NOT IN (
+            WITH RECURSIVE tâches_requises(requise, debloquée) AS ( 
+                  SELECT requise, debloquée FROM Tâche_Tâche WHERE debloquée = $1
+                  UNION 
+                  SELECT Tâche_Tâche.requise, tâches_requises.requise 
+                  FROM tâches_requises 
+                  INNER JOIN Tâche_Tâche ON tâches_requises.requise = Tâche_Tâche.debloquée 
+                ) 
+            SELECT tâches_requises.requise FROM tâches_requises
+        )";
+
+    $params = array($idTask);
+    $result = pg_query_params($GLOBALS["db"], $query, $params);
+    return $result;
+}
+
+function addRequireTask($idTache, $requiredtoadd)
+{
+    $query = "INSERT INTO Tâche_Tâche (requise, debloquée) VALUES ($requiredtoadd, $idTache)";
+    $query = "INSERT INTO Tâche_Tâche (requise, debloquée) VALUES ($1, $2)";
+    $params = array($requiredtoadd, $idTache);
+    pg_query_params($GLOBALS["db"], $query, $params);
+}
+
 

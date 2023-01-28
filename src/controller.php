@@ -193,6 +193,9 @@ function tache(): void
     $result = getComments($_GET['id']);
     $comments = pg_fetch_all($result);
 
+    $result = getOtherImcompletTask($_GET['id']);
+    $getOtherImcompletTask = pg_fetch_all($result);
+
     $result = getRequiredTask($_GET['id']);
     $required = pg_fetch_all($result);
 
@@ -315,6 +318,12 @@ function closeRelease() {
 function comment()
 {
     addComment($_POST['idTache'], $_POST["comment"],$_SESSION['userid']);
+    header('Location: ?action=tache&id='.$_POST['idTache']);
+}
+
+function addRequirement()
+{
+    addRequireTask($_POST['idTache'], $_POST["requiredtoadd"]);
     header('Location: ?action=tache&id='.$_POST['idTache']);
 }
 

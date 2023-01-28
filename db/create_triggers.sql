@@ -1,4 +1,4 @@
-SET SCHEMA 'gestion_projet';
+SET SCHEMA 'public';
 
 CREATE OR REPLACE FUNCTION Verification_Action_Sur_Tache()
     RETURNS TRIGGER AS

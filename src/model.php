@@ -61,7 +61,7 @@ function getReleaseInfo(string $nomProjet, string $nomRelease)
 
 
 // Requête pour récupérer les informations d'une liste de tache d'une release
-function getTaches(string $nomProjet, string $nomRelease)
+function getTasks(string $nomProjet, string $nomRelease)
 {
     $query = "SELECT tâche.id, titre, description, delai, statut, dureeestimée, dureeréelle,
                      nomprojetrelease, nomprojet, nomgroupedetâche, idutilisateur, 
@@ -145,9 +145,9 @@ function getUserRole($idUtilisateur, $nomProjet)
 
 function createTache($titre, $description, $delai, $dureeestimée, $groupeTache, $nomprojet, $nomrelease)
 {
-    $query = "INSERT INTO Tâche (titre, description, delai, statut, dureeestimée, nomgroupedetâche, nomprojet, nomprojetrelease)
-        VALUES ($1,$2,$3,$4,$5,$6,$7,$8)";
-    $params = array($titre, $description, $delai, 'Planifié', $dureeestimée,  $groupeTache, $nomprojet, $nomrelease);
+    $query = "INSERT INTO Tâche (titre, description, delai, statut, dureeestimée, nomgroupedetâche, nomprojet, nomprojetrelease, idcreateur)
+        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)";
+    $params = array($titre, $description, $delai, 'Planifié', $dureeestimée,  $groupeTache, $nomprojet, $nomrelease, $_SESSION['userid']);
     pg_query_params($GLOBALS["db"], $query, $params);
 }
 
@@ -155,15 +155,15 @@ function updateTacheStatus($type,$idTache, $idUser)
 {
     switch ($type){
         case 'terminer':
-            $query = "UPDATE tâche SET statut = $3, dureeréelle = NOW() WHERE id = $1 AND idutilisateur = $2";
+            $query = "UPDATE tâche SET statut = $3, idutilisateur = $2 WHERE id = $1";
             $params = array($idTache, $idUser,'Terminé');
             break;
         case 'assigner':
-            $query = "UPDATE tâche SET idutilisateur = $2, statut = $3 WHERE id = $1 AND idutilisateur IS NULL";
+            $query = "UPDATE tâche SET idutilisateur = $2, statut = $3 WHERE id = $1";
             $params = array($idTache,$idUser,'En cours');
             break;
         default:
-            exit();
+            return;
     }
     pg_query_params($GLOBALS["db"], $query, $params);
 }

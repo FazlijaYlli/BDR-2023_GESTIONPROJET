@@ -4,7 +4,7 @@
         <label for="nameR">Nom</label><br>
         <input type="text" id="nameR" name="nameR"><br>
         <label for="estimatedDate">Date de fin estimée</label><br>
-        <input type="date" id="estimatedDate" name="estimatedDate">
+        <input type="date" id="estimatedDate" value="<?php echo date('Y-m-d'); ?>" name="estimatedDate">
         <input type="submit" value="Créer">
     </form>
 <?php endif ?>

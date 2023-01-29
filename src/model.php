@@ -155,11 +155,11 @@ function updateTacheStatus($type,$idTache, $idUser)
 {
     switch ($type){
         case 'terminer':
-            $query = "UPDATE tâche SET statut = $2, dureeréelle = NOW() WHERE id = $1";
-            $params = array($idTache,'Terminé');
+            $query = "UPDATE tâche SET statut = $3, dureeréelle = NOW() WHERE id = $1 AND idutilisateur = $2";
+            $params = array($idTache, $idUser,'Terminé');
             break;
         case 'assigner':
-            $query = "UPDATE tâche SET idutilisateur = $2, statut = $3 WHERE id = $1";
+            $query = "UPDATE tâche SET idutilisateur = $2, statut = $3 WHERE id = $1 AND idutilisateur IS NULL";
             $params = array($idTache,$idUser,'En cours');
             break;
         default:
